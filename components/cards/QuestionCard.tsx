@@ -13,8 +13,8 @@ interface props{
     name:string,
     picture:string
   },
-  upvotes:Number,
-  views:Number,
+  upvotes:number,
+  views:number,
   answers:Array<object>,
   createdAt:Date
 }
@@ -30,26 +30,14 @@ const QuestionCard=({
   createdAt
 }:props)=>{
   return(
-    <div className='flex flex-col gap-2'>
-      <div className='flex gap-2'>
-        <h3 className='h3-bold text-dark100_light900'>{title}</h3>
-        <div className='flex gap-2'>
-          {tags.map((tag)=>(
-            <span key={tag.id} className='tag'>{tag.name}</span>
-          ))}
-        </div>
+    <div className=' card-wrapper p-9 sm:px-11 rounded-[10px]'>
+      <div className='flex'>
+           
       </div>
-      <div className='flex gap-2'>
-        <span className='text-dark100_light800'>{author}</span>
-        <span className='text-dark100_light800'>{upvotes} upvotes</span>
-        <span className='text-dark100_light800'>{views} views</span>
-        <span className='text-dark100_light800'>{answers} answers</span>
-        <span className='text-dark100_light800'>{createdAt}</span>
-      </div>
+      {title}
     </div>
   )
 }
-
 
 
 export default QuestionCard

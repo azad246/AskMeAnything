@@ -3,10 +3,10 @@ import React from 'react'
 import { Badge } from "@/components/ui/badge"
 
 interface childrenRender{
-  id:Number,
-  title:String,
-  totalQuestions?:Number,
-  showCount?:Boolean
+  id:number,
+  title:string,
+  totalQuestions?:number,
+  showCount?:boolean
 }
 
 const RenderTag = ({id,title,totalQuestions,showCount}:childrenRender) => {
