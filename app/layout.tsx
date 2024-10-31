@@ -14,6 +14,7 @@ export const metadata: Metadata ={
   icons: 'public\assets\images\site-logo.svg'
 }
 import './globals.css'
+import { ThemeProvider } from './context/ThemeProvider'
 const inter=Inter({
   subsets:['latin'],
   weight:['100','200','300','400','500','600','700','800','900'],
@@ -33,25 +34,23 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <ClerkProvider
-    appearance={{
-      elements:{
-        formButtonPrimary:'primary-gradient',
-        footerActionLink:'primary-text-gradient hover :primary-text-500',
-      }
-    }}
-    >
-      <html lang="en">
+    <html lang="en">
         <body className={`${inter.variable} ${spaceGrotesk.variable}`} >
-          <SignedOut>
-            <SignInButton />
-          </SignedOut>
-          <SignedIn>
-            <UserButton />
-          </SignedIn>
+        <ClerkProvider
+        afterSignOutUrl={'/'}
+        appearance={{
+          elements:{
+            formButtonPrimary:'primary-gradient',
+            footerActionLink:'primary-text-gradient hover :primary-text-500',
+          }
+        }}
+        >
+          <ThemeProvider>
+          
           {children}
+          </ThemeProvider>
+    </ClerkProvider>
         </body>
       </html>
-    </ClerkProvider>
   )
 }
