@@ -1,5 +1,5 @@
 import HomeFilters from '@/components/home/HomeFilters'
-import QuestionCard from '@/components/QuestionCard'
+import QuestionCard from '@/components/cards/QuestionCard'
 import Filter from '@/components/shared/Filter'
 import NoResults from '@/components/shared/NoResults'
 import LocalSearchBar from '@/components/shared/Search/LocalSearchBar'
@@ -9,26 +9,26 @@ import Link from 'next/link'
 import React from 'react'
 
 const questions=[
-  // {
-  //   id:1,
-  //   title:'How to create a new project in React?',
-  //   tags:[{id:1,name:'React'},{id:2,name:'JavaScript'},{id:3,name:'Frontend'}],
-  //   author:'John doe',
-  //   upvotes:10,
-  //   views:10,
-  //   answers:2,
-  //   createdAt:'2021-10-10',
-  // },
-  // {
-  //   id:2,
-  //   title:'How to ccenter a div?',
-  //   tags:[{id:1,name:'React'},{id:2,name:'JavaScript'},{id:4,name:'css'}],
-  //   author:'John doe',
-  //   upvotes:10,
-  //   views:10,
-  //   answers:2,
-  //   createdAt:'2021-10-10',
-  // }
+  {
+    id:1,
+    title:'How to create a new project in React?',
+    tags:[{id:1,name:'React'},{id:2,name:'JavaScript'},{id:3,name:'Frontend'}],
+    author:'John doe',
+    upvotes:10,
+    views:10,
+    answers:2,
+    createdAt:'2021-10-10',
+  },
+  {
+    id:2,
+    title:'How to ccenter a div?',
+    tags:[{id:1,name:'React'},{id:2,name:'JavaScript'},{id:4,name:'css'}],
+    author:'John doe',
+    upvotes:10,
+    views:10,
+    answers:2,
+    createdAt:'2021-10-10',
+  }
 ]
 
 const Home = () => {
@@ -57,7 +57,18 @@ const Home = () => {
     </div>
     <HomeFilters/>
     <div className='mt-10 flex w-full flex-col gap-6'>
-      {(questions.length>0)?questions.map((item)=>(<QuestionCard/>)):(<NoResults/>)}
+      {(questions.length>0)?questions.map((item)=>(<QuestionCard
+      key={item.id}
+      title={item.title}
+      tags={item.tags} 
+      author={item.author}
+      upvotes={item.upvotes}
+      />)):(<NoResults
+      title="No Questions found!"
+      description="Maybe you can be the first one.."
+      link="/ask-questions"
+      linkTitle="Ask Question"
+      />)}
       
     </div>
     </>
