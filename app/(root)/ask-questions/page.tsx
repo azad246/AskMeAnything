@@ -1,6 +1,6 @@
 import Questions from '@/components/forms/Questions'
 import { getUserById } from '@/lib/actions/user.action';
-import { auth } from '@clerk/nextjs/server';
+// import { auth } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
 import React from 'react'
 

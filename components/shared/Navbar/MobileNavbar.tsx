@@ -4,9 +4,7 @@ import {
     Sheet,
     SheetClose,
     SheetContent,
-    SheetDescription,
-    SheetHeader,
-    SheetTitle,
+    
     SheetTrigger,
 } from "@/components/ui/sheet"
 import Image from 'next/image'

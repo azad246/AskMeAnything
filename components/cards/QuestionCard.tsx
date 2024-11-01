@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import { stringify } from 'querystring'
 import React from 'react'
 import RenderTag from '../shared/Search/RenderTag'
 import Metric from '../shared/Search/Metric'

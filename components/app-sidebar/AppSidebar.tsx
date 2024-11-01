@@ -2,16 +2,15 @@
 import {
     Sidebar,
     SidebarContent,
-    SidebarFooter,
+   
     SidebarGroup,
     SidebarGroupContent,
-    SidebarGroupLabel,
-    SidebarHeader,
+    
     SidebarMenu,
     SidebarMenuItem,
   } from "@/components/ui/sidebar"
 import { sidebarLinks } from "@/constants"
-import { SignedIn, SignedOut } from "@clerk/nextjs";
+import { SignedOut } from "@clerk/nextjs";
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation";

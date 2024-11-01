@@ -4,10 +4,10 @@ import React from 'react'
 import { Button } from '../ui/button'
 
 interface prop{
-    title:string,
-    description:string,
-    link:string,
-    linkTitle:String
+    title:string;
+    description:string;
+    link:string;
+    linkTitle:string;
 }
 
 const NoResults = ({title,description,link,linkTitle}:prop) => {

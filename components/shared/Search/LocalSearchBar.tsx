@@ -10,7 +10,7 @@ interface customInput{
     placeHolder:string,
     otherClasses:string
 }
-const LocalSearchBar = ({route,iconPosition,imgSrc,placeHolder,otherClasses}:customInput) => {
+const LocalSearchBar = ({iconPosition,imgSrc,placeHolder,otherClasses}:customInput) => {
     return (
       <div className={`background-light800_darkgradient flex min-h-[56px] grow items-center gap-4 rounded-[10px] px-4 ${otherClasses}`}>
         {iconPosition==='left' && <Image src={imgSrc} alt="search_icon" width={24} height={24} className='cursor-pointer' />}
