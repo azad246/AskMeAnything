@@ -116,7 +116,8 @@ const Home = () => {
     </div>
     <HomeFilters/>
     <div className='mt-10 flex w-full flex-col gap-6'>
-      {(questions.length>0)?questions.map((item)=>(<QuestionCard
+      {(questions.length>0)?questions.map((item)=>(
+      <QuestionCard
       key={item._id}
       title={item.title}
       tags={item.tags} 
