@@ -27,7 +27,7 @@ import { Button } from "../ui/button";
               <SidebarMenu>
                 {sidebarLinks.map((item)=>{
                   const isActive=((pathName===item.route) || (pathName.includes(item.route) && item.route.length>1))
-                  console.log(isActive);
+                  
                   return (
                     <SidebarMenuItem key={item.route}>
                       <Link href={item.route}  className={`${isActive?'primary-gradient text-light-900 rounded-lg':'text-dark300_light900'} flex items-center justify-center gap-2 bg-transparent py-3 px-4`}>

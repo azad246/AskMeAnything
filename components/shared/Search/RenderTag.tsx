@@ -3,7 +3,7 @@ import React from 'react'
 import { Badge } from "@/components/ui/badge"
 
 interface childrenRender{
-  id:number,
+  id:string,
   title:string,
   totalQuestions?:number,
   showCount?:boolean

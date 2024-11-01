@@ -5,31 +5,31 @@ import RenderTag from './RenderTag'
 import { title } from 'process'
 const hotQuestions=[
     {
-        id:1,
+        _id:1,
         title:"How to Ensure Unique User Profile with ON CONFLICT in PostgreSQL Using Drizzle ORM?",
     },
     {
-        id:2,
+        _id:2,
         title:"How to Ensure Unique User Profile with ON CONFLICT in PostgreSQL Using Drizzle ORM?",
     },
     {
-        id:3,
+        _id:3,
         title:"How to backlsk Unique User Profile with ON CONFLICT in PostgreSQL Using Drizzle ORM?",
     }
 ]
 const popularTags=[
     {
-        id:1,
+        _id:'1',
         title:"React",
         totalQuestions:100
     },
     {
-        id:2,
+        _id:'2',
         title:"javascript",
         totalQuestions:100
     },
     {
-        id:3,
+        _id:'3',
         title:"html",
         totalQuestions:100
     }
@@ -45,7 +45,7 @@ const RightSidebar = () => {
             <div className='mt-7 flex w-full flex-col gap-[30px]'>
                 {hotQuestions.map((question)=>{
                     return (
-                        <Link href={`/questions/${question.id}`} key={question.id} className='flex cursor-pointer items-center justify-betweengap-7'>
+                        <Link href={`/questions/${question._id}`} key={question._id} className='flex cursor-pointer items-center justify-betweengap-7'>
                             <p className='body-medium text-dark500_light700'>{question.title}</p>
                             <Image src='/assets/icons/chevron-right.svg' alt='arrow-right' width={20} height={20 }/>
                         </Link>
@@ -56,7 +56,7 @@ const RightSidebar = () => {
          <div className='mt-16'>
             <h3 className='h3-bold text-dark200_light900'>Popular tags</h3> 
             <div className='mt-7 flex flex-col gap-4'>
-                {popularTags.map((tag)=>(<RenderTag key={tag.id} id={tag.id} title={tag.title} totalQuestions={tag.totalQuestions} showCount/>))}
+                {popularTags.map((tag)=>(<RenderTag key={tag._id} id={tag._id} title={tag.title} totalQuestions={tag.totalQuestions} showCount/>))}
             </div>
          </div>
     </section>
