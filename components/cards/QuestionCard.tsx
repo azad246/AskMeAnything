@@ -7,7 +7,7 @@ import { formatAndDivideNumber, getTimestamp } from '@/lib/utils'
 
 
 interface props {
-  _id: string,
+  _id?: string,
   title: string,
   tags: {
     _id: string,

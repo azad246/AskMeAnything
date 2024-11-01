@@ -20,13 +20,13 @@ import { Editor } from '@tinymce/tinymce-react';
 import { Badge } from '../ui/badge';
 import Image from 'next/image';
 import { createQuestion } from '@/lib/actions/question.action';
-import {useRouter,usePathname} from 'next/navigation'
+import {useRouter} from 'next/navigation'
 
 interface Props{
   mongoUserId:string
 }
-// @ts-ignore comment 
-const type:Any='create'
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const type:any='create'
 const Questions = ({mongoUserId}:Props) => {
   const editorRef = useRef();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -63,8 +63,9 @@ const Questions = ({mongoUserId}:Props) => {
       setIsSubmitting(false);
     }
   }
- // @ts-ignore comment 
-  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, field: Any) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, field: any) => {
     if (e.key === 'Enter' && field.name === 'tags') {
       e.preventDefault();
 
@@ -89,8 +90,9 @@ const Questions = ({mongoUserId}:Props) => {
       }
     }
   }
-   // @ts-ignore comment 
-  const handleTagRemove=(tag:string,field:Any)=>{
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
+  const handleTagRemove=(tag:string,field:any)=>{
     const newTags=field.value.filter((tag:string)=>tag!=tag)
     form.setValue('tags',newTags)
   }
@@ -126,8 +128,8 @@ const Questions = ({mongoUserId}:Props) => {
                 <Editor
                   apiKey={process.env.NEXT_PUBLIC_TINYKEY}
                   onInit={(_evt, editor) => {
-                    // @ts-ignore
-                    editorRef.current = editor
+                    //@ts-ignore
+                    editorRef.current = editor ;
                   }}
                   onBlur={field.onBlur}
                   onEditorChange={(content)=>field.onChange(content)}
@@ -167,7 +169,7 @@ const Questions = ({mongoUserId}:Props) => {
                  {field.value.length > 0 && (
                   <div className="flex-start mt-2.5 gap-2.5">
                      
-                    {field.value.map((tag: Any) => ( 
+                    {field.value.map((tag: any) => ( 
                       <Badge key={tag} className="subtle-medium background-light800_dark300 text-light400_light500 flex items-center justify-center gap-2 rounded-md border-none px-4 py-2 capitalize" 
                       >
                         {tag}

@@ -121,6 +121,7 @@ const Home = () => {
       key={item._id}
       title={item.title}
       tags={item.tags} 
+      views={item.views}
       author={item.author}
       upvotes={item.upvotes}
       answers={item.answers}
