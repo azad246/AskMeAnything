@@ -3,7 +3,9 @@
 import { SignIn } from "@clerk/clerk-react"
 const Signin = () => {
   return (
-    <div><SignIn/></div>
+    <main className="flex min-h-screen items-center ">
+      <SignIn/>
+    </main>
   )
 }
 
