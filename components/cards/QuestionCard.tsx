@@ -3,11 +3,12 @@ import React from 'react'
 import RenderTag from '../shared/Search/RenderTag'
 import Metric from '../shared/Search/Metric'
 import { formatAndDivideNumber, getTimestamp } from '@/lib/utils'
+import { ObjectId } from 'mongoose'
 
 
 
 interface props {
-  _id?: string,
+  _id: ObjectId,
   title: string,
   tags: {
     _id: string,
@@ -34,6 +35,7 @@ const QuestionCard = ({
   answers,
   createdAt
 }: props) => {
+  
   return (
     <div className=' card-wrapper p-9 sm:px-11 rounded-[10px]'>
       <div className='flex flex-col-reverse items-start justify-between gap-5 sm:flex-row'>
@@ -50,12 +52,12 @@ const QuestionCard = ({
 
       <div className='mt-3.5 flex flex-wrap gap-2'>
         {tags.map((tag) => (
-          <RenderTag key={tag._id} id={tag._id} title={tag.name}/>
+          <RenderTag key={tag._id} _id={tag._id} title={tag.name}/>
         ))}
       </div>
       <div className='flex-between mt-6 w-full flex-wrap gap-3'>
       <Metric
-        imgUrl={"/assets/icons/avatar.svg"}
+        imgUrl={author.picture}
         alt="user"
         value={author.name}
         title={getTimestamp(createdAt)}

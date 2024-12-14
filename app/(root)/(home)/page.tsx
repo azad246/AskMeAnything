@@ -13,7 +13,7 @@ import { GetQuestionsParams } from '@/lib/actions/shared.types'
 
 const Home = async() => {
   const result=await getQuestions({});
-  console.log(result)
+ 
   return (
     <>
     <div className='flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center  '>
@@ -41,6 +41,7 @@ const Home = async() => {
     <div className='mt-10 flex w-full flex-col gap-6'>
       {(result.questions.length>0)?result.questions.map((item)=>(
       <QuestionCard
+      _id={item._id}
       key={item._id}
       title={item.title}
       tags={item.tags} 
@@ -55,7 +56,6 @@ const Home = async() => {
       link="/ask-questions"
       linkTitle="Ask Question"
       />)}
-      
     </div>
     </>
   )

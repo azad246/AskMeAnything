@@ -3,7 +3,7 @@ import { Schema } from "mongoose";
 
 
 
-export interface CreateAnswerParams {
+export interface  CreateAnswerParams {
   content: string;
   author: string; 
   question: string; 

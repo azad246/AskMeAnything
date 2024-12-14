@@ -3,7 +3,7 @@
 import Question from "@/Database/question.model";
 import { connectToDatabase } from "../mongoose"
 import Tag from "@/Database/tag.model";
-import { CreateQuestionParams, GetQuestionsParams } from "./shared.types";
+import { CreateQuestionParams, GetQuestionByIdParams, GetQuestionsParams } from "./shared.types";
 import User from "@/Database/user.model";
 import { revalidatePath } from "next/cache";
 
@@ -27,7 +27,6 @@ export async function createQuestion(params:CreateQuestionParams){
         connectToDatabase();
         const {title,content,tags,author,path}=params;
         //create question
-        console.log('this statement is being printed in questions.actions.ts')
         const question =await Question.create({title,content,author,path});
         const tagDocuments=[];
         for (const tag of tags) {
@@ -49,8 +48,22 @@ export async function createQuestion(params:CreateQuestionParams){
         revalidatePath(path);
     } catch (error) {
         // donnect to a db 
-        console.log('this statement is being printed an error has occurred')
         console.log(error)
+    }
+}
+
+export async function getQuestionById(params:GetQuestionByIdParams){
+    try {
+        connectToDatabase();
+        const {questionId}=params;
+        const ques=await Question.findById(questionId)
+        .populate({path:'tags',model:Tag,select:'_id name'})
+        .populate({path:'author',model:User,select:'_id name picture clerkId'});
+        
+        return ques;
+    } catch (error) {
+        console.log(error);
+        throw new Error('An error occurred while fetching question');
     }
 }
   

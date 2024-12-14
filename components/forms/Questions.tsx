@@ -21,6 +21,7 @@ import { Badge } from '../ui/badge';
 import Image from 'next/image';
 import { createQuestion } from '@/lib/actions/question.action';
 import {usePathname, useRouter} from 'next/navigation'
+import { useTheme } from '@/app/context/ThemeProvider';
 
 interface Props{
   mongoUserId:string
@@ -28,6 +29,7 @@ interface Props{
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const type:any='create'
 const Questions = ({mongoUserId}:Props) => {
+  const {mode}=useTheme();
   const editorRef = useRef();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router=useRouter();
@@ -47,7 +49,7 @@ const Questions = ({mongoUserId}:Props) => {
     setIsSubmitting(true);
     
     try {
-      console.log(values.tags);
+
       await createQuestion({
         title:values.title,
         content:values.explanation,
@@ -145,7 +147,9 @@ const Questions = ({mongoUserId}:Props) => {
                     toolbar: 'undo redo |  ' +
                       'codesample bold italic forecolor | alignleft aligncenter ' +
                       'alignright alignjustify | bullist numlist outdent indent',
-                    content_style: 'body { font-family:Inter; font-size:16px }'
+                    content_style: 'body { font-family:Inter; font-size:16px }',
+                    skin:(mode==='dark')?'oxide-dark':'oxide',
+                    content_css:(mode==='dark')?'dark':'light' 
                   }}
                 />
               </FormControl>
