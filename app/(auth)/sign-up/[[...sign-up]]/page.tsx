@@ -3,7 +3,9 @@ import { SignUp } from '@clerk/nextjs'
 
 const Sign_up = () => {
     return (
-      <div><SignUp/></div>
+      <main className="flex min-h-screen min-w-full items-center justify-center">
+        <SignUp/>
+      </main>
     )
   }
   

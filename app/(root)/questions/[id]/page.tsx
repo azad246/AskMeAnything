@@ -18,7 +18,7 @@ const Page = async({params}) => {
   if(clerkId){
     mongoUser=await getUserById({userId:clerkId})
   }
-  console.log("here is the monoguser",mongoUser)
+  
 
   const result=await getQuestionById({questionId:params.id});
   
@@ -35,7 +35,7 @@ const Page = async({params}) => {
       </Link>
       <div className='flex justify-end'>
         <Votes
-        type="question"
+        type="Question"
         itemId={JSON.stringify(result._id)}
         userId={JSON.stringify(mongoUser._id)}
         upvotes={result.upvotes.length}
@@ -81,7 +81,7 @@ const Page = async({params}) => {
    </div>
    <AllAnswers
     questionId={result._id}
-    userId={JSON.stringify(mongoUser._id)}
+    userId={mongoUser._id}
     totalAnswers={result.answers.length}
    />
    <Answer question={result.content} authorId={JSON.stringify(mongoUser._id)} questionId={JSON.stringify(result._id)} />

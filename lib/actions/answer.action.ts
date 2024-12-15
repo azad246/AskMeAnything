@@ -2,7 +2,7 @@
 
 import Answer from "@/Database/answer.model";
 import { connectToDatabase } from "../mongoose";
-import { CreateAnswerParams, GetAnswersParams } from "./shared.types";
+import { AnswerVoteParams, CreateAnswerParams, GetAnswersParams } from "./shared.types";
 import Question from "@/Database/question.model";
 import { revalidatePath } from "next/cache";
 import User from "@/Database/user.model";
@@ -40,5 +40,54 @@ export async function  getAnswers(params:GetAnswersParams){
     } catch (error) {
         console.log(error);
         throw new Error("Error in fetching answers");
+    }
+}
+
+
+export async function upvoteAnswer(params:AnswerVoteParams){
+    try {
+        connectToDatabase();
+        const {answerId,userId,hasupVoted,hasdownVoted,path}=params;
+
+        let updateQuery={};
+        if(hasupVoted){
+            updateQuery={$pull:{upvotes:userId}}
+        }else if(hasdownVoted){
+            updateQuery={$pull:{downvotes:userId},$push:{upvotes:userId}}
+        }else{
+            updateQuery={$addToSet:{upvotes:userId}}
+        }
+        const answer=await Answer.findByIdAndUpdate(answerId,updateQuery,{new:true});
+        if(!answer){
+            throw new Error("Answer not Found");
+        }
+        revalidatePath(path);
+    } catch (error) {
+        console.log(error);
+        throw new Error('An error occurred while fetching Answer');
+    }
+}
+
+
+export async function downvoteAnswer(params:AnswerVoteParams){
+    try {
+        connectToDatabase();
+        const {answerId,userId,hasupVoted,hasdownVoted,path}=params;
+        let updateQuery={};
+        if(hasdownVoted){
+            updateQuery={$pull:{downvotes:userId}}
+        }else if(hasupVoted){
+            updateQuery={$pull:{upvotes:userId},$push:{downvotes:userId}}
+        }else{
+            updateQuery={$addToSet:{downvotes:userId}}
+        }
+        const answer=await Answer.findByIdAndUpdate(answerId,updateQuery,{new:true});
+        if(!answer){
+            throw new Error("Answer not Found");
+        }
+        revalidatePath(path);
+    } catch (error) {
+        console.log(error);
+        throw new Error('An error occurred while fetching Answer');
     }
 }

@@ -19,7 +19,7 @@ interface props {
     name: string,
     picture: string
   },
-  upvotes: number,
+  upvotes: ObjectId[],
   views: number,
   answers: Array<object>,
   createdAt: Date
@@ -53,7 +53,8 @@ const QuestionCard = ({
       <div className='mt-3.5 flex flex-wrap gap-2'>
         {tags.map((tag) => (
           <RenderTag key={tag._id} _id={tag._id} title={tag.name}/>
-        ))}
+        ))
+        }
       </div>
       <div className='flex-between mt-6 w-full flex-wrap gap-3'>
       <Metric
@@ -68,7 +69,7 @@ const QuestionCard = ({
         <Metric
         imgUrl="/assets/icons/like.svg"
         alt="upvote"
-        value={formatAndDivideNumber(upvotes)}
+        value={formatAndDivideNumber(upvotes.length)}
         title="votes"
         textStyles="small-medium text-dark400_light800"
         />
