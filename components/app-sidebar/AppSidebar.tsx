@@ -2,15 +2,13 @@
 import {
     Sidebar,
     SidebarContent,
-   
     SidebarGroup,
     SidebarGroupContent,
-    
     SidebarMenu,
     SidebarMenuItem,
   } from "@/components/ui/sidebar"
 import { sidebarLinks } from "@/constants"
-import { SignedOut } from "@clerk/nextjs";
+import { SignedOut, useAuth } from "@clerk/nextjs";
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation";
@@ -18,6 +16,7 @@ import { Button } from "../ui/button";
   
   export function AppSidebar() {
     const pathName=usePathname();
+    const {userId}=useAuth();
     return (
       <Sidebar className="top-40">
         <SidebarContent>
@@ -26,10 +25,17 @@ import { Button } from "../ui/button";
               <SidebarMenu>
                 {sidebarLinks.map((item)=>{
                   const isActive=((pathName===item.route) || (pathName.includes(item.route) && item.route.length>1))
-                  
+                  let myRoute=item.route;
+                  if(myRoute==='/profile/'){
+                    if(userId){
+                    myRoute=`${item.route}/${userId}`
+                    }else{
+                      return null;
+                    }
+                  }
                   return (
                     <SidebarMenuItem key={item.route}>
-                      <Link href={item.route}  className={`${isActive?'primary-gradient text-light-900 rounded-lg':'text-dark300_light900'} flex items-center justify-center gap-2 bg-transparent py-3 px-4`}>
+                      <Link href={myRoute}  className={`${isActive?'primary-gradient text-light-900 rounded-lg':'text-dark300_light900'} flex items-center justify-center gap-2 bg-transparent py-3 px-4`}>
                       <Image src={item.imgURL} alt={'item'} height={20} width={20} className={`${isActive?"":"invert-colors"}`}/>
                       <p className="max-lg:hidden text-sm">{item.label}</p>
                       </Link>

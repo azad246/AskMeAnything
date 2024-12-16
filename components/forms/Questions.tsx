@@ -19,28 +19,35 @@ import { useRef } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import { Badge } from '../ui/badge';
 import Image from 'next/image';
-import { createQuestion } from '@/lib/actions/question.action';
+import { createQuestion, EditQuestion } from '@/lib/actions/question.action';
 import {usePathname, useRouter} from 'next/navigation'
 import { useTheme } from '@/app/context/ThemeProvider';
 
 interface Props{
-  mongoUserId:string
+  mongoUserId:string;
+  type:string;
+  questionDetails?:string;
 }
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const type:any='create'
-const Questions = ({mongoUserId}:Props) => {
+// type Formtype='create'|'Edit';
+// const type:Formtype='create'
+
+const Questions = ({mongoUserId,type,questionDetails}:Props) => {
   const {mode}=useTheme();
   const editorRef = useRef();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router=useRouter();
   const pathName=usePathname();
- 
+
+  const parsedDetails=questionDetails?JSON.parse(questionDetails):{};
+
+  const groupedTags=parsedDetails.tags.map((tag)=>tag.name)
   const form = useForm<z.infer<typeof QuestionsSchema>>({
     resolver: zodResolver(QuestionsSchema),
     defaultValues: {
-      title: "",
-      explanation:'',
-      tags: []
+      title: parsedDetails.title || '',
+      explanation:parsedDetails.content || '',
+      tags: groupedTags || [] 
     },
   })
 
@@ -49,16 +56,25 @@ const Questions = ({mongoUserId}:Props) => {
     setIsSubmitting(true);
     
     try {
+      if(type==='Edit'){
+        await EditQuestion({
+          questionId:parsedDetails._id,
+          title:values.title,
+          content:values.explanation,  
+          path:pathName
+          });
+        router.push(`/questions/${parsedDetails._id}`);
+      }else{
+        await createQuestion({
+          title:values.title,
+          content:values.explanation,
+          tags:values.tags,
+          author:JSON.parse(mongoUserId),   
+          path:pathName,  
+          });
+          router.push('/');
+      }
 
-      await createQuestion({
-        title:values.title,
-        content:values.explanation,
-        tags:values.tags,
-        author:JSON.parse(mongoUserId),   
-        path:pathName,  
-        });
-
-      router.push('/');
     } catch (error) {
       console.log("error has come! \n\n\n")
       console.log(error);
@@ -136,7 +152,7 @@ const Questions = ({mongoUserId}:Props) => {
                   }}
                   onBlur={field.onBlur}
                   onEditorChange={(content)=>field.onChange(content)}
-                  initialValue=""
+                  initialValue={parsedDetails.content || ''}
                   init={{
                     height: 350,
                     menubar: false,
@@ -168,7 +184,9 @@ const Questions = ({mongoUserId}:Props) => {
               <FormLabel className='paragraph-semibold text-dark400_light800'>Tags<span className='text-primary-500'>*</span></FormLabel>
               <FormControl className='mt-3.5'>
                 <>
-                <Input className='no-focus paragraph-regular background-light900_dark300 text-dark300_light700 light-border-2 border min-h-[56px]' 
+                <Input 
+                disabled={(type==='Edit')}
+                className='no-focus paragraph-regular background-light900_dark300 text-dark300_light700 light-border-2 border min-h-[56px]' 
                 placeholder="Add Tags."
                 onKeyDown={(e)=>handleInputKeyDown(e,field)}/>
                  {field.value.length > 0 && (
@@ -178,14 +196,14 @@ const Questions = ({mongoUserId}:Props) => {
                       <Badge key={tag} className="subtle-medium background-light800_dark300 text-light400_light500 flex items-center justify-center gap-2 rounded-md border-none px-4 py-2 capitalize" 
                       >
                         {tag}
-                        <Image 
+                        {type! =='create' && <Image 
                           src="/assets/icons/close.svg"
                           alt="Close icon"
                           width={12}
                           height={12}
                           className="cursor-pointer object-contain invert-0 dark:invert"
-                          onClick={()=>handleTagRemove(tag, field)}
-                        />
+                          onClick={()=>type==="create"?handleTagRemove(tag, field):()=>{}}
+                        />}
                       </Badge>
                     ))}
                   </div>
@@ -205,11 +223,11 @@ const Questions = ({mongoUserId}:Props) => {
         <Button type="submit" className='primary-gradient w-fit !text-light-900' disabled={isSubmitting}>
           {isSubmitting? (
             <>
-             {type==='edit'?'Editing...':'Posting...'}
+             {type==='Edit'?'Editing...':'Posting...'}
             </>
           ):(
           <>
-            {type==='edit'?'Edit Questions':'Ask a Question'}
+            {type==='Edit'?'Edit Questions':'Ask a Question'}
           </>
         )}  
           </Button>

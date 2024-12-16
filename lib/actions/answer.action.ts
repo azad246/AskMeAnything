@@ -2,10 +2,12 @@
 
 import Answer from "@/Database/answer.model";
 import { connectToDatabase } from "../mongoose";
-import { AnswerVoteParams, CreateAnswerParams, GetAnswersParams } from "./shared.types";
+import { AnswerVoteParams, CreateAnswerParams, DeleteAnswerParams, GetAnswersParams } from "./shared.types";
 import Question from "@/Database/question.model";
 import { revalidatePath } from "next/cache";
 import User from "@/Database/user.model";
+import Interaction from "@/Database/interaction.model";
+import Tag from "@/Database/tag.model";
 
 export async function createAnswer(params:CreateAnswerParams){
     try {
@@ -89,5 +91,28 @@ export async function downvoteAnswer(params:AnswerVoteParams){
     } catch (error) {
         console.log(error);
         throw new Error('An error occurred while fetching Answer');
+    }
+}
+
+export async function deleteAnswer(params:DeleteAnswerParams){
+    const {answerId,path}=params;
+    try {
+        connectToDatabase();
+        const answer=await Answer.findById(answerId);
+        if(!answer){
+            throw new Error("Answer not found");
+        }
+        await Answer.deleteOne({
+            _id:answerId
+        })
+        await Question.updateMany({_id:answer.question},{$pull:{answers:answerId}});
+
+        await Interaction.deleteMany({
+            Answer:answerId
+        })
+        await Tag.updateMany({Answers:answerId},{$pull:{Answers:answerId}});
+        revalidatePath(path);
+    } catch (error) {
+        console.log(error)
     }
 }
