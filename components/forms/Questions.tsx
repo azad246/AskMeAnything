@@ -40,13 +40,13 @@ const Questions = ({mongoUserId,type,questionDetails}:Props) => {
   const pathName=usePathname();
 
   const parsedDetails=questionDetails?JSON.parse(questionDetails):{};
+  const groupedTags=parsedDetails.tags?.map((tag:any)=>tag.name);
 
-  const groupedTags=parsedDetails.tags.map((tag)=>tag.name)
   const form = useForm<z.infer<typeof QuestionsSchema>>({
     resolver: zodResolver(QuestionsSchema),
     defaultValues: {
-      title: parsedDetails.title || '',
-      explanation:parsedDetails.content || '',
+      title: parsedDetails?.title || '',
+      explanation:parsedDetails?.content || '',
       tags: groupedTags || [] 
     },
   })
@@ -58,7 +58,7 @@ const Questions = ({mongoUserId,type,questionDetails}:Props) => {
     try {
       if(type==='Edit'){
         await EditQuestion({
-          questionId:parsedDetails._id,
+          questionId:parsedDetails?._id,
           title:values.title,
           content:values.explanation,  
           path:pathName
@@ -152,7 +152,7 @@ const Questions = ({mongoUserId,type,questionDetails}:Props) => {
                   }}
                   onBlur={field.onBlur}
                   onEditorChange={(content)=>field.onChange(content)}
-                  initialValue={parsedDetails.content || ''}
+                  initialValue={parsedDetails?.content || ''}
                   init={{
                     height: 350,
                     menubar: false,

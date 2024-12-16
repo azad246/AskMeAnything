@@ -14,7 +14,6 @@ const QuestionTab = async({searchParams,userId,clerkId}:props) => {
     userId,
     page:1,
   });
-  // console.log(result)
   return(
   <> 
     {result?.questions.map((question):ReactNode=>{

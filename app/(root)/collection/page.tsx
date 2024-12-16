@@ -16,7 +16,6 @@ const Home = async() => {
   const result=await getSavedQuestions({
     clerkId:userId,
   })
-//   console.log(result);
 
   return (
     <>
