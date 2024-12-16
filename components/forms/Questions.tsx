@@ -141,7 +141,7 @@ const Questions = ({mongoUserId,type,questionDetails}:Props) => {
           name="explanation"
           render={({ field }) => (
             <FormItem className='flex w-full flex-col gap-3'>
-              <FormLabel className='paragraph-semibold text-dark400_light800'>Question Title<span className='text-primary-500'>*</span></FormLabel>
+              <FormLabel className='paragraph-semibold text-dark400_light800'>Question Explanation<span className='text-primary-500'>*</span></FormLabel>
               <FormControl className='mt-3.5'>
                 {/* formeditor  */}
                 <Editor
