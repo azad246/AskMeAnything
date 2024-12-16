@@ -2,6 +2,7 @@
 
 import Question from "@/Database/question.model";
 import { connectToDatabase } from "../mongoose"
+import { FilterQuery } from "mongoose";
 import Tag from "@/Database/tag.model";
 import { CreateQuestionParams, DeleteQuestionParams, EditQuestionParams, GetAllUsersParams, GetQuestionByIdParams, GetQuestionsParams, GetUserByIdParams, QuestionVoteParams } from "./shared.types";
 import User from "@/Database/user.model";
@@ -10,9 +11,19 @@ import Answer from "@/Database/answer.model";
 import Interaction from "@/Database/interaction.model";
 
 export async function getQuestions(params:GetQuestionsParams){
+    
     try {
         connectToDatabase();
-        const questions=await Question.find({})
+        const {searchQuery}=params;
+        const query:FilterQuery<typeof Question>={};
+        if(searchQuery){
+            query.$or=[
+                {title:{$regex:new RegExp(searchQuery,'i')}},
+                {content:{$regex:new RegExp(searchQuery,'i')}},
+
+            ]
+        }
+        const questions=await Question.find(query)
         .populate({path:'tags',model:Tag})
         .populate({path:'author',model:User})
         .sort({createdAt:-1});

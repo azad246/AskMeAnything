@@ -6,15 +6,17 @@ import { QuestionFilters } from '@/constants/filters'
 import { getSavedQuestions } from '@/lib/actions/user.action'
 import { redirect } from 'next/navigation'
 import { auth } from '@clerk/nextjs/server'
+import { SearchParamsProps } from '@/types'
 
 
-const Home = async() => {
+const Home = async({searchParams}:SearchParamsProps) => {
   const {userId}=auth();
   if(!userId){
     redirect('/sign-in');
   }
   const result=await getSavedQuestions({
     clerkId:userId,
+    searchQuery:searchParams.q
   })
 
   return (
@@ -24,7 +26,7 @@ const Home = async() => {
 
     <div className='mt-11 flex justify-between gap-5 max-sm:flex-col sm:items-center'>
       <LocalSearchBar
-      route="/"
+      route="/collection"
       iconPosition="left"
       imgSrc="/assets/icons/search.svg"
       placeHolder="Search for questions"

@@ -26,8 +26,14 @@ export async function getAllTags(params:GetAllTagsParams){
     try {
         connectToDatabase();
         //find all tags;
-        // const {page,pageSize,filter,searchQuery}=params;
-        const tags=Tag.find({});
+        const {page,pageSize,filter,searchQuery}=params;
+        const query:FilterQuery<typeof Tag>={};
+        if(searchQuery){
+            query.$or=[
+                {name:{$regex:new RegExp(searchQuery,'i')}}
+            ]
+        }
+        const tags=Tag.find(query);
         return tags;
     } catch (error) {
         console.log(error);

@@ -1,9 +1,6 @@
 import QuestionCard from "@/components/cards/QuestionCard";
-import Filter from "@/components/shared/Filter";
 import NoResults from "@/components/shared/NoResults";
 import LocalSearchBar from "@/components/shared/Search/LocalSearchBar";
-import {  TagFilters } from "@/constants/filters";
-import { IQuestion } from "@/Database/question.model";
 import { getQuestionsByTag } from "@/lib/actions/tag.action"
 import { URLProps } from "@/types";
 
@@ -13,6 +10,7 @@ const page = async({params,searchParams}:URLProps) => {
         page:1,
         searchQuery:searchParams.q
     });
+    // console.log(ques)
   return (
     <>
       <h1 className='h1-bold text-dark100_light900'>{ques.tagTitle}</h1>
@@ -20,7 +18,7 @@ const page = async({params,searchParams}:URLProps) => {
 
     <div className='mt-11 w-full'>
       <LocalSearchBar
-      route="/"
+      route={`/tags/${params.id}`}
       iconPosition="left"
       imgSrc="/assets/icons/search.svg"
       placeHolder="Search tag questions"
