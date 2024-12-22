@@ -8,14 +8,17 @@ import { HomePageFilters } from '@/constants/filters'
 import Link from 'next/link'
 import React from 'react'
 import { getQuestions } from '@/lib/actions/question.action'
-import { GetQuestionsParams } from '@/lib/actions/shared.types'
 import { SearchParamsProps } from '@/types'
+import Pagination from '@/components/shared/Pagination'
 
 
 const Home = async({searchParams}:SearchParamsProps) => {
   const result=await getQuestions({
     searchQuery:searchParams.q,
+    filter:searchParams.filter,
+    page:searchParams.page?Number(searchParams.page):1
   });
+ //recommended
  
   return (
     <>
@@ -59,6 +62,12 @@ const Home = async({searchParams}:SearchParamsProps) => {
       link="/ask-questions"
       linkTitle="Ask Question"
       />)}
+    </div>
+    <div className='mt-10'>
+    <Pagination
+    pageNumber={searchParams?.page?+searchParams.page:1}
+    isNext={result.isNext}
+    />
     </div>
     </>
   )

@@ -31,14 +31,41 @@ export async function createAnswer(params:CreateAnswerParams){
     }
 }
 
+
 export async function  getAnswers(params:GetAnswersParams){
     try {
         connectToDatabase();
-        const {questionId}=params;
+        const {questionId,sortBy,page=1,pageSize=10}=params;
+        //  ["highestUpvotes","lowestUpvotes","recent","old]
+        
+        const skipAmount=(page-1)*pageSize;
+
+        const sortQuery={};
+        switch (sortBy) {
+            case "highestUpvotes":
+                sortQuery["upvotes"]=-1;
+                break;
+            case "lowestUpvotes":
+                sortQuery["upvotes"]=1;
+                break;
+            case "recent":
+                sortQuery["createdAt"]=-1;
+                break;
+            case "old":
+                sortQuery["createdAt"]=1;
+                break;
+            default:
+                break;
+        }
         const answers=await Answer.find({question:questionId})
         .populate({path:"author",model:User,select:" _id clerkId name picture"})
-        .sort({createdAt: -1 });
-        return answers;
+        .sort(sortQuery)
+        .skip(skipAmount)
+        .limit(pageSize);
+        const totalAnswers=await Answer.countDocuments({question:questionId});
+
+        const isNext=totalAnswers>skipAmount+answers.length;
+        return {answers,isNext};
     } catch (error) {
         console.log(error);
         throw new Error("Error in fetching answers");

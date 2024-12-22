@@ -1,5 +1,6 @@
 import UserCard from '@/components/cards/UserCard'
 import Filter from '@/components/shared/Filter'
+import Pagination from '@/components/shared/Pagination'
 import LocalSearchBar from '@/components/shared/Search/LocalSearchBar'
 import { Button } from '@/components/ui/button'
 import { UserFilters } from '@/constants/filters'
@@ -7,20 +8,16 @@ import { getAllUsers } from '@/lib/actions/user.action'
 import { SearchParamsProps } from '@/types'
 import Link from 'next/link'
 
+
 const Page = async({searchParams}:SearchParamsProps) => {
   const result=await getAllUsers({
     searchQuery:searchParams.q,
+    filter:searchParams.filter,
+    page:searchParams.page?Number(searchParams.page):1,
   });
   return (
     <>
-    <div className='flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center  '>
-      <h1 className='h1-bold text-dark100_light900'>All Questions</h1>
-      <Link href='/ask-questions' className='flex justify-end max-sm:w-full'>
-      <Button className='primary-gradient min-h-[46px] px-4 py-3 !text-light-900'>
-        Ask Something..
-      </Button>
-      </Link>
-    </div>
+    <h1 className='h1-bold text-dark100_light900'>All Users</h1>
     <div className='mt-11 flex justify-between gap-5 max-sm:flex-col sm:items-center'>
       <LocalSearchBar
       route="/community"
@@ -31,10 +28,9 @@ const Page = async({searchParams}:SearchParamsProps) => {
       /> 
       <Filter filters={UserFilters}
       otherClasses="min-h-[56px] sm:min-w-[170px]"
-     
       />
     </div>
-    <section className='mt-11 flex flex-wrap gap-4'>
+    <section className='mt-12 flex flex-wrap gap-4'>
         {(result.users.length>0)?(result.users.map((user)=>{
           return <UserCard key={user._id} user={user}/>
         })):(
@@ -45,8 +41,13 @@ const Page = async({searchParams}:SearchParamsProps) => {
             </Link>
           </div>
         )}
-        
     </section>
+    <div className='mt-10'>
+    <Pagination
+    pageNumber={searchParams?.pageNumber?+searchParams.page:1}
+    isNext={result.isNext}
+    />
+    </div>
     </>
   )
 }

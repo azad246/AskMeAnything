@@ -7,6 +7,7 @@ import { getSavedQuestions } from '@/lib/actions/user.action'
 import { redirect } from 'next/navigation'
 import { auth } from '@clerk/nextjs/server'
 import { SearchParamsProps } from '@/types'
+import Pagination from '@/components/shared/Pagination'
 
 
 const Home = async({searchParams}:SearchParamsProps) => {
@@ -16,7 +17,9 @@ const Home = async({searchParams}:SearchParamsProps) => {
   }
   const result=await getSavedQuestions({
     clerkId:userId,
-    searchQuery:searchParams.q
+    searchQuery:searchParams.q,
+    filter:searchParams.filter,
+    page:searchParams.page?Number(searchParams.page):1,
   })
 
   return (
@@ -55,6 +58,10 @@ const Home = async({searchParams}:SearchParamsProps) => {
       linkTitle="Ask Question"
       />)}
     </div>
+    <Pagination
+    pageNumber={searchParams?.page?+searchParams.page:1}
+    isNext={result.isNext}
+    />
     </>
   )
 }
