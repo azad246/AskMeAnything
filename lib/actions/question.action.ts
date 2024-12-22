@@ -80,6 +80,17 @@ export async function createQuestion(params:CreateQuestionParams){
         await Question.findByIdAndUpdate(question._id,{
             $push: { tags: { $each: tagDocuments }}
           });
+          //interactio reorcord for user'sas asked quesiton
+          await Interaction.create({
+            user:author,
+            action:"ask_question",
+            question:question._id,
+            tags:tagDocuments
+          })
+          //increment author's reputation by +5 fr creating a question
+          await User.findByIdAndUpdate(author,{
+            $inc:{reputation:5}
+          })
         revalidatePath(path);
     } catch (error) {
         // donnect to a db 
@@ -115,9 +126,17 @@ export async function upvoteQuestion(params:QuestionVoteParams){
             updateQuery={$addToSet:{upvotes:userId}}
         }
         const question=await Question.findByIdAndUpdate(questionId,updateQuery,{new:true});
+        const user=await User.findByIdAndUpdate(userId,{$inc:{reputation:hasupVoted?1:-1}})
+
+        //increment the author;s reputation
+        await User.findByIdAndUpdate(question.author,{
+            $inc:{reputation:hasupVoted?10:-10}
+        })
+
         if(!question){
             throw new Error("Question not Found");
         }
+
         revalidatePath(path);
     } catch (error) {
         console.log(error);
@@ -138,6 +157,13 @@ export async function downvoteQuestion(params:QuestionVoteParams){
             updateQuery={$addToSet:{downvotes:userId}}
         }
         const question=await Question.findByIdAndUpdate(questionId,updateQuery,{new:true});
+        const user=await User.findByIdAndUpdate(userId,{$inc:{reputation:hasdownVoted?1:-1}})
+
+        //increment the author;s reputation
+        await User.findByIdAndUpdate(question.author,{
+            $inc:{reputation:hasdownVoted?-10:10}
+        })
+
         if(!question){
             throw new Error("Question not Found");
         }
