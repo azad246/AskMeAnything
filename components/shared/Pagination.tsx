@@ -13,7 +13,7 @@ const Pagination = ({pageNumber,isNext}:propInterface) => {
   const router=useRouter();
   const searchParams=useSearchParams();
 
-  console.log("Page-number-:",pageNumber);
+  
 
   const handleNavigation=(direction:string)=>{
     const nextPageNumber=direction==='prev'?pageNumber-1:pageNumber+1;

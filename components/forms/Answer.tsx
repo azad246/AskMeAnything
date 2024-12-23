@@ -21,6 +21,7 @@ interface props{
 const Answer = ({question,questionId,authorId}:props) => {
     const [isSubmitting, setisSubmitting] = useState(false)
     const [isSubmittingAI, setisSubmittingAI] = useState(false)
+
     const {mode}=useTheme();   
     const pathName=usePathname();
     const editorRef=useRef(null)
@@ -31,26 +32,54 @@ const Answer = ({question,questionId,authorId}:props) => {
             answer:''
         }
     })
-    const handleCreateAnswer=async(values:z.infer<typeof AnswerSchema>)=>{
-      setisSubmitting(true);
-      try {
-        await createAnswer({
-          content:values.answer,
-          author:JSON.parse(authorId),
-          question:JSON.parse(questionId),
-          path: pathName,
-        }) 
-        form.reset();
-        if(editorRef.current){
-          const editor=editorRef.current;
-          editor.setContent('');
-        }
-      } catch (error) {
-        console.log(error);
-      }finally{
-        setisSubmitting(false)
-      }
+
+  const handleCreateAnswer = async (values: z.infer<typeof AnswerSchema>) => {
+    setisSubmitting(true);
+    let answerContent = values.answer;
+    if (editorRef.current) {
+      answerContent = editorRef.current.getContent({ format: "text" });
     }
+
+    answerContent = answerContent.replace(/&nbsp;/g, ' ')
+      .replace(/&amp;/g, '&')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"')
+      .replace(/&apos;/g, "'")
+      .replace(/&#?\w+;/g, '')
+      .replace(/<[^>]+>/g, '');
+
+    const wordCount = answerContent
+      .trim()
+      .split(/\s+/)
+      .filter((word) => word.length > 0)
+      .length;
+      
+      console.log(wordCount)
+    if (wordCount < 30) {
+      alert("Answer should be at least 30 words.");
+      setisSubmitting(false);
+      return;
+    }
+    try {
+      await createAnswer({
+        content: values.answer,
+        author: JSON.parse(authorId),
+        question: JSON.parse(questionId),
+        path: pathName,
+      })
+      form.reset();
+      if (editorRef.current) {
+        const editor = editorRef.current;
+        editor.setContent('');
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setisSubmitting(false)
+    }
+  }
+
     const generateAIAnswer=async()=>{
       if(!authorId)return;
       setisSubmittingAI(true); 
@@ -120,13 +149,14 @@ const Answer = ({question,questionId,authorId}:props) => {
                     plugins: [
                       'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
                       'anchor', 'searchreplace', 'visualblocks', 'codesample', 'fullscreen',
-                      'insertdatetime', 'media', 'table'],
+                      'insertdatetime', 'media', 'table','wordcount'],
                     toolbar: 'undo redo |  ' +
                       'codesample bold italic forecolor | alignleft aligncenter ' +
                       'alignright alignjustify | bullist numlist outdent indent',
                     content_style: 'body { font-family:Inter; font-size:16px }',
                     skin:mode==='dark'?'oxide-dark':'oxide',
                     content_css:mode==='dark'?'dark':'light',
+                    
                   }}
                 />
               </FormControl>
