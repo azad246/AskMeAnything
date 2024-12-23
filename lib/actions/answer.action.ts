@@ -24,7 +24,7 @@ export async function createAnswer(params:CreateAnswerParams){
         })
         await Interaction.create({
             user:author,
-            action:"",
+            action:"answer",
             question,
             answer:newAnswer._id,
             tags:questionObject.tags

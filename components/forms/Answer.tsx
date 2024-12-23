@@ -24,6 +24,7 @@ const Answer = ({question,questionId,authorId}:props) => {
     const {mode}=useTheme();   
     const pathName=usePathname();
     const editorRef=useRef(null)
+   
     const form=useForm<z.infer<typeof AnswerSchema>>({
         resolver:zodResolver(AnswerSchema),
         defaultValues:{
@@ -50,25 +51,41 @@ const Answer = ({question,questionId,authorId}:props) => {
         setisSubmitting(false)
       }
     }
-    // const generateAIAnswer=async()=>{
-    //   if(!authorId)return;
-    //   setisSubmittingAI(true); 
-    //   try {
-    //     const response=await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}`)
-    //   } catch (error) {
-    //     console.log(error)
-    //   }finally{
-    //     setisSubmittingAI(false)
-    //   }
-    // }
+    const generateAIAnswer=async()=>{
+      if(!authorId)return;
+      setisSubmittingAI(true); 
+      try {
+        const response=await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/gemini`,{
+          method:'POST',
+          body:JSON.stringify({
+            question
+          })
+        })
+        const aiAnswer=await response.json();
+
+        const formattedAnswer=aiAnswer.answer.replace(/\n/g, '<br/>');
+        if(editorRef.current){
+          const editor=editorRef.current as any;
+          editor.setContent(formattedAnswer);
+        }
+        //toast notification
+        console.log(aiAnswer.answer)
+      } catch (error) {
+        console.log(error)
+      }finally{
+        setisSubmittingAI(false)
+      }
+    }
   return (
     <div>
         <div className='flex flex-col justify-between gap-5 sm:flex-row sm:items-center smg:gap-2'>
             <h4 className='paragraph-semibold text-dark400_light800'>Write your answer here</h4>
-
             <Button className='btn light-border-2 gap-1.5 rounded-md px-4 py-2.5 text-primary-500 shadow_none dark:text-primary-500'
-             onClick={()=> {/*generate ai answer*/}}
+             onClick={generateAIAnswer} disabled={isSubmittingAI}
             >
+               {isSubmittingAI?(<>
+              Generating....
+            </>):(<>
                 <Image src='/assets/icons/stars.svg' 
                 alt='start'
                 width={12}
@@ -76,6 +93,7 @@ const Answer = ({question,questionId,authorId}:props) => {
                 className='object-contain'
                 />
                 Generate from AI
+            </>)}
             </Button>
         </div>
     <Form {...form}>

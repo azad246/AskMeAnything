@@ -49,7 +49,7 @@ const Page = async({params,searchParams}:URLProps)=> {
         />
       </div>
     </div>
-    <h2 className='h2-semibold text-dark200_light900 mt-3.5 w-full text-left'>
+    <h2 className='h2-semibold text-dark200_light800 mt-3.5 w-full text-left'>
       {result.title}
     </h2>
    </div>
