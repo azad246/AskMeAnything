@@ -10,7 +10,7 @@ https://ask-me-anything-green.vercel.app/
 
 - **User Accounts**: Sign up and log in to personalize your experience.
 - **Ask Questions**: Post questions on any tech-related topic and get help from the community.
-- **Answer & Comment**: Provide answers to questions or leave comments for further clarification.
+- **Answer & Comment**: Provide answers to questions or leave comments for further clarification,Also capable of using AI generated answers.
 - **Upvote/Downvote**: Users can upvote or downvote answers based on helpfulness, improving answer visibility.
 - **Search**: Easily find questions and answers using a search bar with topic filtering.
 - **Tags**: Label questions with relevant tags for better organization and discoverability.
