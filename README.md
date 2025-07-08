@@ -18,11 +18,10 @@ https://ask-me-anything-green.vercel.app/
 
 ## Tech Stack
 
-- **Frontend**: Next.js, React, Tailwind CSS
-- **Backend**: Node.js, Express
-- **Database**: MongoDB (or any other suitable database)
-- **Authentication**: JWT (JSON Web Tokens) for secure login
-- **Deployment**: Vercel (for frontend) and Heroku (or any other cloud platform for backend)
+- **Frameworks Used**: Next.js 14,Clerk ,Tailwind CSS
+- **Database**: MongoDB
+- **Authentication**: CLerkJs.
+- **Deployment**: Vercel.
 
 ## Getting Started
 
